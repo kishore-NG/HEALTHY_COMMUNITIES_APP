@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:healthy_communities_flutter_app/main.dart';
+import 'package:healthy_communities_flutter_app/store/common_data/common_action.dart';
+import 'package:redux/redux.dart';
 
 class RegisterPage
     extends
@@ -51,6 +54,47 @@ class _RegisterPageState
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<
+    void
+  >
+  _registerAndDispatch() async {
+    if (_formKey.currentState!.validate()) {
+      setState(
+        () {
+          _isLoading =
+              true;
+        },
+      );
+
+      final firstName =
+          _firstNameController.text.trim();
+      final phone =
+          _phoneController.text.trim();
+      final zip =
+          _zipController.text.trim();
+      final email =
+          _emailController.text.trim();
+      final password =
+          _passwordController.text.trim();
+
+      // Dispatch register action to Redux store
+      store.dispatch(
+        register(
+          firstName:
+              firstName,
+          phoneNumber:
+              phone,
+          zipCode:
+              zip,
+          email:
+              email,
+          password:
+              password,
+        ),
+      );
+    }
   }
 
   @override
@@ -433,7 +477,10 @@ class _RegisterPageState
                                   onPressed:
                                       _isLoading
                                           ? null
-                                          : _handleRegister,
+                                          : () {
+                                            _registerAndDispatch();
+                                          },
+
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(
                                       0xFF6C5CE7,
@@ -728,52 +775,5 @@ class _RegisterPageState
         ),
       ],
     );
-  }
-
-  void _handleRegister() async {
-    if (_formKey.currentState!.validate()) {
-      setState(
-        () {
-          _isLoading =
-              true;
-        },
-      );
-
-      // Simulate API call
-      await Future.delayed(
-        const Duration(
-          seconds:
-              2,
-        ),
-      );
-
-      setState(
-        () {
-          _isLoading =
-              false;
-        },
-      );
-
-      // Handle successful registration
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(
-        SnackBar(
-          content: const Text(
-            'Account created successfully!',
-          ),
-          backgroundColor: const Color(
-            0xFF6C5CE7,
-          ),
-          behavior:
-              SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              8,
-            ),
-          ),
-        ),
-      );
-    }
   }
 }
