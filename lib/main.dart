@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_communities_flutter_app/home_page.dart';
 import 'package:healthy_communities_flutter_app/views/pages/login_page.dart';
+import 'package:healthy_communities_flutter_app/views/pages/register_page.dart';
 
 void
 main() {
@@ -30,7 +31,7 @@ class MyApp
       debugShowCheckedModeBanner:
           false,
       home:
-          const LoginPage(),
+          const RegisterPage(),
     );
   }
 }
